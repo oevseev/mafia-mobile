@@ -38,11 +38,9 @@
 
     // Анимация плавного появления на экране
     .fade.ng-hide-add {
-        -webkit-animation: fadeOut 0.5s;
         animation: fadeOut 0.5s;
     }
     .fade.ng-hide-remove {
-        -webkit-animation: fadeIn 0.5s;
         animation: fadeIn 0.5s;
     }
 }

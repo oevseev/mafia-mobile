@@ -25,26 +25,28 @@
         canVote(): {{canVote()}}; canChat(): {{canChat()}}<br>
       </div>
 
-      <ion-scroll class="chat-window">
-        <ul class="chat" scroll="true">
-          <li ng-repeat="message in messages">
-            <div class="chat-message" id="{{$index}}" ng-if="!message.isLog">
-              <div class="message-left">
-                <div class="player-index p{{message.playerIndex}}">
-                  {{message.playerIndex}}
+      <div class="chat-window">
+        <ion-scroll class="chat-scroller">
+          <ul class="chat">
+            <li ng-repeat="message in messages">
+              <div class="chat-message" id="{{$index}}" ng-if="!message.isLog">
+                <div class="message-left">
+                  <div class="player-index p{{message.playerIndex}}">
+                    {{message.playerIndex}}
+                  </div>
+                </div>
+                <div class="message-right">
+                  <span class="player-name">{{message.playerName}}:</span>
+                  <span class="message">{{message.message}}</span>
                 </div>
               </div>
-              <div class="message-right">
-                <span class="player-name">{{message.playerName}}:</span>
+              <div class="log-message" id="{{$index}}" ng-if="message.isLog">
                 <span class="message">{{message.message}}</span>
               </div>
-            </div>
-            <div class="log-message" id="{{$index}}" ng-if="message.isLog">
-              <span class="message">{{message.message}}</span>
-            </div>
-          </li>
-        </ul>
-      </ion-scroll>
+            </li>
+          </ul>
+        </ion-scroll>
+      </div>
 
       <div class="vote-button-window ng-hide" ng-show="canVote()">
         <button class="button button-full button-small button-assertive">

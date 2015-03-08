@@ -139,6 +139,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
       isLog: true,
       message: message
     });
+    $ionicScrollDelegate.scrollBottom(true);
   };
 
   // Отправка сообщения
@@ -198,10 +199,31 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
   GameManager.setEventHandler('update', function (data) {
     $scope.roomData.state = data.state;
     if (data.outvotedPlayer) {
-      $scope.roomData.elimPlayers[data.outvotedPlayer.playerIndex] = {
+      $scope.roomData.exposedPlayers[data.outvotedPlayer.playerIndex] = {
         role: data.outvotedPlayer.role,
         eliminated: true
       };
+    }
+
+    if (data.state.isVoting) {
+      $scope.logMessage("Начинается голосование!");
+    } else {
+      var message,
+        outcome;
+
+      if (data.state.isDay) {
+        message = "Наступает день, просыпаются мирные жители.";
+        outcome = "убит";
+      } else {
+        message = "Наступает ночь. Мирные жители засыпают, просыпается мафия.";
+        outcome = "посажен в тюрьму";
+      }
+
+      if (data.outvotedPlayer) {
+        $scope.logMessage("Игрок #" + data.outvotedPlayer.index + " (" +
+          Roles[data.outvotedPlayer.role] + ") был " + outcome + ".");
+      }
+      $scope.logMessage(message);
     }
   });
 
@@ -249,10 +271,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
       playerName: $scope.roomData.playerList[data.playerIndex],
       message: data.message
     });
-    if ($ionicScrollDelegate.getScrollPosition().top >= angular.element(
-        '.chat').height() - angular.element('.chat-window').height()) {
-      $ionicScrollDelegate.scrollBottom(true);
-    }
+    $ionicScrollDelegate.scrollBottom(true);
   });
 
   // Голосование игрока

@@ -1,34 +1,45 @@
 .room-view {
     .game-screen, .game-placeholder {
+        position: absolute;
+        width: 100%;
         height: 100%;
     }
 
     .game-screen {
-        display: table;
         width: 100%;
+        height: 100%;
+
+        // Додуматься до этого решения стоило миллиона нервов.
+        // А решение-то простое и элегантное.
+        display: flex;
+        flex-flow: column;
 
         .info-window {
-            display: table-row;
+            height: 75px;
             background-color: $stable;
+            border-bottom: 1px silver solid;
         }
         .chat-window {
-            display: table-row;
-            height: 100%;
+            flex: 1;
+
+            // Блядь, какие же знатные костыли-то, а!
+            display: flex;
+            flex-flow: column;
+
+            .chat-scroller {
+                flex: 1;
+            }
         }
         .vote-button-window {
-            display: table-row;
-
             > button {
                 margin: 0px;
             }
 
             // Анимация появления/исчезновения
             &.ng-hide-add {
-                -webkit-animation: fadeOutDown 0.5s;
                 animation: fadeOutDown 0.5s;
             }
             &.ng-hide-remove {
-                -webkit-animation: fadeInUp 0.5s;
                 animation: fadeInUp 0.5s;
             }
         }
@@ -41,6 +52,9 @@
         width: 100%;
 
         // Строки чередующихся цветов
+        li:nth-child(odd) {
+            background-color: #ffffff;
+        }
         li:nth-child(even) {
             background-color: #f8f8f8;
         }
