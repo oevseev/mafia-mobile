@@ -1,0 +1,70 @@
+<ion-view view-title="Комната {{id}}" cache-view="false">
+
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-back-button ng-click="leaveGame()">
+      Выйти
+    </ion-nav-back-button>
+  </ion-nav-bar>
+
+  <ion-nav-buttons side="right">
+    <button class="button button-clear icon ion-play ng-hide"
+      ng-click="startGame()" ng-show="canStartGame">
+    </button>
+  </ion-nav-buttons>
+
+  <ion-content class="room-view" scroll="false">
+
+    <div class="game-placeholder center-content ng-hide" ng-show="adTime">
+      <p>Посмотри-ка рекламки!</p>
+    </div>
+
+    <div class="game-screen" ng-hide="adTime">
+
+      <div class="info-window">
+        {{roomData}}<br/>
+        canVote(): {{canVote()}}; canChat(): {{canChat()}}<br>
+      </div>
+
+      <ion-scroll class="chat-window">
+        <ul class="chat" scroll="true">
+          <li ng-repeat="message in messages">
+            <div class="chat-message" id="{{$index}}" ng-if="!message.isLog">
+              <div class="message-left">
+                <div class="player-index p{{message.playerIndex}}">
+                  {{message.playerIndex}}
+                </div>
+              </div>
+              <div class="message-right">
+                <span class="player-name">{{message.playerName}}:</span>
+                <span class="message">{{message.message}}</span>
+              </div>
+            </div>
+            <div class="log-message" id="{{$index}}" ng-if="message.isLog">
+              <span class="message">{{message.message}}</span>
+            </div>
+          </li>
+        </ul>
+      </ion-scroll>
+
+      <div class="vote-button-window ng-hide" ng-show="canVote()">
+        <button class="button button-full button-small button-assertive">
+          Голосовать
+        </button>
+      </div>
+
+    </div>
+
+  </ion-content>
+
+  <ion-footer-bar class="bar-stable item-input-inset">
+    <label class="item-input-wrapper">
+      <div class="icon ion-chatboxes placeholder-icon"></div>
+      <input type="text" placeholder="Сообщение в чат" ng-model="chatMessage">
+    </label>
+    <button class="button button-clear button-positive" ng-disabled="!canChat()"
+        ng-click="sendMessage()">
+      <strong>Отпр.</strong>
+    </button>
+  </ion-footer-bar>
+
+</ion-view>

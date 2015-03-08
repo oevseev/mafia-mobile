@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<widget id="me.x3n.mafia-mobile" version="0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <!-- Метаданные приложения -->
+  <name>mafia-mobile</name>
+  <description>
+    Мобильная версия популярной игры «Мафия»
+  </description>
+  <author email="ixen.eoa@me.com" href="http://x3n.me/">
+    Олег Евсеев
+  </author>
+
+  <content src="index.html"/>
+  <access origin="*"/>
+
+  <!-- Настройки -->
+  <preference name="webviewbounce" value="false"/>
+  <preference name="UIWebViewBounce" value="false"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="BackupWebStorage" value="none"/>
+
+  <feature name="StatusBar">
+    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+  </feature>
+
+  <preference name="StatusBarOverlaysWebView" value="true" />
+  <preference name="StatusBarStyle" value="default" />
+</widget>

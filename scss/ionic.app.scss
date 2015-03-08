@@ -1,0 +1,23 @@
+// Ресурсы Ionic
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+@import "www/lib/ionic/scss/ionic";
+
+// Выравнивание по вертикали
+.center-content {
+    display: -webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Большая иконка
+.icon-big {
+    font-size: 36px;
+}
+
+// Стили видов
+@import "main.view.scss";
+@import "room.view.scss";

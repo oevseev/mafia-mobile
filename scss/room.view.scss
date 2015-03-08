@@ -1,0 +1,92 @@
+.room-view {
+    .game-screen, .game-placeholder {
+        height: 100%;
+    }
+
+    .game-screen {
+        display: table;
+        width: 100%;
+
+        .info-window {
+            display: table-row;
+            background-color: $stable;
+        }
+        .chat-window {
+            display: table-row;
+            height: 100%;
+        }
+        .vote-button-window {
+            display: table-row;
+
+            > button {
+                margin: 0px;
+            }
+
+            // Анимация появления/исчезновения
+            &.ng-hide-add {
+                -webkit-animation: fadeOutDown 0.5s;
+                animation: fadeOutDown 0.5s;
+            }
+            &.ng-hide-remove {
+                -webkit-animation: fadeInUp 0.5s;
+                animation: fadeInUp 0.5s;
+            }
+        }
+    }
+
+    .chat {
+        display: table;
+        border-collapse: separate;
+        border-spacing: 3px 2px;
+        width: 100%;
+
+        // Строки чередующихся цветов
+        li:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
+        // Стиль пользовательского сообщения
+        .chat-message {
+            display: table-row;
+
+            // В левой части сообщения содержится индекс пользователя,
+            // отправившего сообщения.
+            .message-left {
+                display: table-cell;
+                text-align: center;
+                vertical-align: top;
+                height: 100%;
+            }
+            // В правой части сообщения содержится имя пользователя и
+            // отправленное сообщение.
+            .message-right {
+                display: table-cell;
+            }
+
+            // Индекс пользователя заполняет всю левую колонку
+            .player-index {
+                border-radius: 3px;
+                // overflow: auto;
+                text-align: center;
+                width: 30px;
+                height: 100%;
+            }
+            // Имя пользователя выделяется полужирным
+            .player-name {
+                font-weight: bold;
+            }
+        }
+        
+        // Стиль информационного сообщения
+        .log-message .message {
+            display: table-cell;
+            font-style: italic;
+        }
+    }
+}
+
+// Цвета индекса по умолчанию
+.player-index {
+    background-color: #000;
+    color: #fff;
+}

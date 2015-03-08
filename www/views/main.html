@@ -1,0 +1,38 @@
+<ion-view>
+  <ion-content class="main-view" scroll="false">
+
+    <div class="logo"></div>
+
+    <div class="main-menu">
+
+      <div class="center-content" ng-hide="isDefined(isSuccess)">
+        <div class="icon icon-big ion-loading-c"></div>
+      </div>
+
+      <div class="buttons center-content fade ng-hide" ng-show="isSuccess">
+        <div>
+          <button class="button button-main" ng-click="newGame('find')">
+            Найти игру
+          </button>
+          <button class="button button-main" ng-click="newGame('new')">
+            Играть с друзьями
+          </button>
+          <button class="button button-aux button-positive" ng-click="setName()">
+            Задать имя
+          </button>
+        </div>
+      </div>
+
+      <div class="center-content fade ng-hide" ng-show="isSuccess === false">
+        <div>
+          <p>Не удалось подключиться к серверу.</p>
+          <button class="button button-block" ng-click="reconnect()">
+            Повторить попытку
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </ion-content>
+</ion-view>
