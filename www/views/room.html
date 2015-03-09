@@ -2,7 +2,6 @@
 
   <ion-nav-bar class="bar-stable">
     <ion-nav-back-button ng-click="leaveGame()">
-      Выйти
     </ion-nav-back-button>
   </ion-nav-bar>
 
@@ -61,10 +60,11 @@
   <ion-footer-bar class="bar-stable item-input-inset">
     <label class="item-input-wrapper">
       <div class="icon ion-chatboxes placeholder-icon"></div>
-      <input type="text" placeholder="Сообщение в чат" ng-model="chatMessage">
+      <input id="chat-input" type="text" placeholder="Сообщение в чат"
+        ng-model="chatMessage">
     </label>
-    <button class="button button-clear button-positive" ng-disabled="!canChat()"
-        ng-click="sendMessage()">
+    <button class="button button-clear button-positive"
+      ng-disabled="!canChat()" ng-click="sendMessage()">
       <strong>Отпр.</strong>
     </button>
   </ion-footer-bar>

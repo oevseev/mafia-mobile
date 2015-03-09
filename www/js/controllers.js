@@ -95,7 +95,7 @@ c.controller('MainController', function ($scope, $state, $ionicLoading,
 });
 
 // Контроллер комнаты
-c.controller('RoomController', function ($scope, $state, $stateParams,
+c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   $ionicHistory, $ionicPopup, $ionicScrollDelegate, GameManager, Roles) {
 
   $scope.id = $stateParams.id;
@@ -139,19 +139,25 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
       isLog: true,
       message: message
     });
+
+    if (angular.element('#chat-input').is(':focus')) {
+      $timeout(function() {
+        angular.element('#chat-input').focus();
+      });
+    }
     $ionicScrollDelegate.scrollBottom(true);
   };
 
   // Отправка сообщения
   $scope.sendMessage = function () {
-    if (typeof $scope.roomData == 'undefined') {
+    if (typeof $scope.roomData == 'undefined' || !this.chatMessage) {
       return;
     }
 
     $scope.messages.push({
       isLog: false,
       playerIndex: $scope.roomData.playerIndex + 1,
-      playerName: GameManager.userData.playerName,
+      playerName: $scope.roomData.playerList[$scope.roomData.playerIndex],
       message: this.chatMessage // WTF, Angular?
     });
 
@@ -159,6 +165,9 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
     this.chatMessage = "";
 
     $ionicScrollDelegate.scrollBottom(true);
+    $timeout(function() {
+      angular.element('#chat-input').focus();
+    });
   };
 
   // Начало игры
@@ -271,6 +280,12 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
       playerName: $scope.roomData.playerList[data.playerIndex],
       message: data.message
     });
+
+    if (angular.element('#chat-input').is(':focus')) {
+      $timeout(function() {
+        angular.element('#chat-input').focus();
+      });
+    }
     $ionicScrollDelegate.scrollBottom(true);
   });
 

@@ -19,6 +19,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 });
 
+// Настройка Ionic
+app.config(function ($ionicConfigProvider) {
+  with ($ionicConfigProvider) {
+    backButton.text("Выйти");
+    navBar.alignTitle("center");
+  }
+});
+
 // Инициализация приложения Ionic
 app.run(function ($rootScope, $ionicPlatform, GameManager) {
   $ionicPlatform.ready(function () {
