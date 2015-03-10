@@ -95,9 +95,18 @@ c.controller('MainController', function ($scope, $state, $ionicLoading,
 });
 
 // Контроллер комнаты
-c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
-  $ionicHistory, $ionicPopup, $ionicScrollDelegate, GameManager, Roles) {
+c.controller('RoomController', function ($scope, $state, $stateParams,
+  $timeout, $ionicHistory, $ionicModal, $ionicPopup, $ionicScrollDelegate,
+  GameManager, Roles) {
 
+  // Вид списка игроков
+  $ionicModal.fromTemplateUrl('views/players.html', {
+    scope: $scope
+  }).then(function (modal) {
+    $scope.playerListView = modal;
+  });
+
+  // ID комнаты и список сообщений
   $scope.id = $stateParams.id;
   $scope.messages = [];
 
@@ -170,6 +179,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     });
   };
 
+
   // Начало игры
   $scope.startGame = function () {
     GameManager.startGame();
@@ -180,6 +190,11 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     GameManager.leaveGame();
     GameManager.disconnect();
     $ionicHistory.goBack();
+  };
+
+  // Показ списка игроков
+  $scope.showPlayerList = function () {
+    $scope.playerListView.show();
   };
 
   // Если имеем уже активное подключение
