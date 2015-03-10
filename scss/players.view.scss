@@ -1,5 +1,8 @@
 .players-popover {
     height: auto !important;
+    width: auto !important;
+
+    padding: 10px !important;
 }
 
 .platform-android .players-popover {
@@ -16,5 +19,11 @@
     .player-index {
         padding-left: 5px;
         margin-right: 5px;
+    }
+
+    .role-icon {
+        &.unknown {
+            display: none;
+        }
     }
 }

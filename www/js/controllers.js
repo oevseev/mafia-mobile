@@ -95,8 +95,8 @@ c.controller('MainController', function ($scope, $state, $ionicLoading,
 });
 
 // Контроллер комнаты
-c.controller('RoomController', function ($scope, $state, $stateParams,
-  $timeout, $ionicHistory, $ionicPopover, $ionicPopup, $ionicScrollDelegate,
+c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
+  $ionicHistory, $ionicModal, $ionicPopover, $ionicPopup, $ionicScrollDelegate,
   GameManager, Roles) {
 
   // Вид списка игроков
@@ -105,6 +105,13 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
   }).then(function (popover) {
     $scope.playerListView = popover;
   });
+
+  // Вид голосования
+  $ionicModal.fromTemplateUrl('views/vote.html', {
+    scope: $scope
+  }).then(function (modal) {
+    $scope.voteView = modal;
+  })
 
   // ID комнаты и список сообщений
   $scope.id = $stateParams.id;
@@ -140,7 +147,22 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
       return $scope.roomData.role == 'mafia';
     }
     return $scope.roomData.role == 'mafia' || $scope.roomData.state.isDay;
-  }
+  };
+
+  // Получение имени роли игрока
+  $scope.getPlayerRoleClass = function (index) {
+    var epEntry = $scope.roomData.exposedPlayers[index];
+
+    if (epEntry) {
+      var roleClass = epEntry.role;
+      if (!epEntry.eliminated) {
+        roleClass += ' alive';
+      }
+      return roleClass;
+    } else {
+      return 'unknown';
+    }
+  };
 
   // Добавление информационного сообщения в чат
   $scope.logMessage = function (message) {
@@ -149,11 +171,6 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
       message: message
     });
 
-    if (angular.element('#chat-input').is(':focus')) {
-      $timeout(function() {
-        angular.element('#chat-input').focus();
-      });
-    }
     $ionicScrollDelegate.scrollBottom(true);
   };
 
@@ -182,8 +199,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
   // Голосование
   $scope.vote = function (vote) {
     GameManager.vote(vote);
-    $scope.playerListView.hide();
-    $scope.logMessage("Вы проголосовали против игрока #" + vote + ".");
+    $scope.logMessage("Вы проголосовали против игрока #" + (vote + 1) + ".");
   };
 
   // Начало игры
@@ -202,6 +218,11 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
   $scope.showPlayerList = function ($event) {
     $scope.playerListView.show($event);
   };
+
+  // Показ вида голосования
+  $scope.showVoteView = function () {
+    $scope.voteView.show();
+  }
 
   /*
   $scope.getPlayerGrid = function (rowSize) {
@@ -223,6 +244,11 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
     return playerGrid;
   };
   */
+
+  $scope.$on('$destroy', function () {
+    $scope.playerListView.remove()
+    $scope.voteView.remove();
+  });
 
   // Если имеем уже активное подключение
   if (GameManager.socket.connected) {
@@ -271,7 +297,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
       }
 
       if (data.outvotedPlayer) {
-        $scope.logMessage("Игрок #" + data.outvotedPlayer.index + " (" +
+        $scope.logMessage("Игрок #" + (data.outvotedPlayer.index + 1) + " (" +
           Roles[data.outvotedPlayer.role] + ") был " + outcome + ".");
       }
       $scope.logMessage(message);
@@ -323,17 +349,12 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
       message: data.message
     });
 
-    if (angular.element('#chat-input').is(':focus')) {
-      $timeout(function() {
-        angular.element('#chat-input').focus();
-      });
-    }
     $ionicScrollDelegate.scrollBottom(true);
   });
 
   // Голосование игрока
   GameManager.setEventHandler('playerVote', function (data) {
-    $scope.logMessage("Игрок #" + data.playerIndex + "голосует против игрока" +
-      + data.vote + "!");
+    $scope.logMessage("Игрок #" + (data.playerIndex + 1) +
+      "голосует против игрока" + (data.vote + 1) + "!");
   });
 });

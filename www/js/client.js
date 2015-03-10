@@ -250,8 +250,7 @@ client.service('GameManager', function ($rootScope, $timeout, Config) {
     }
 
     this.socket.emit('playerVote', {
-      vote: vote,
-      id: id
+      vote: vote
     });
   };
 });

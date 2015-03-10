@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="me.x3n.mafia-mobile" version="0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+
   <!-- Метаданные приложения -->
   <name>mafia-mobile</name>
   <description>
@@ -25,4 +26,5 @@
   <preference name="StatusBarOverlaysWebView" value="true"/>
   <preference name="StatusBarStyle" value="default"/>
   <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
+
 </widget>
