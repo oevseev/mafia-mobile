@@ -1,4 +1,14 @@
+.players-popover {
+    height: auto !important;
+}
+
+.platform-android .players-popover {
+  margin-top: 10px !important;
+}
+
 .players-view {
+    position: relative !important;
+
     .vote-button {
         margin: 0px;
     }

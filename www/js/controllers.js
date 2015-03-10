@@ -96,14 +96,14 @@ c.controller('MainController', function ($scope, $state, $ionicLoading,
 
 // Контроллер комнаты
 c.controller('RoomController', function ($scope, $state, $stateParams,
-  $timeout, $ionicHistory, $ionicModal, $ionicPopup, $ionicScrollDelegate,
+  $timeout, $ionicHistory, $ionicPopover, $ionicPopup, $ionicScrollDelegate,
   GameManager, Roles) {
 
   // Вид списка игроков
-  $ionicModal.fromTemplateUrl('views/players.html', {
+  $ionicPopover.fromTemplateUrl('views/players.html', {
     scope: $scope
-  }).then(function (modal) {
-    $scope.playerListView = modal;
+  }).then(function (popover) {
+    $scope.playerListView = popover;
   });
 
   // ID комнаты и список сообщений
@@ -199,8 +199,8 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
   };
 
   // Показ списка игроков
-  $scope.showPlayerList = function () {
-    $scope.playerListView.show();
+  $scope.showPlayerList = function ($event) {
+    $scope.playerListView.show($event);
   };
 
   /*

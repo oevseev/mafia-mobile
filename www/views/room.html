@@ -49,7 +49,7 @@
 
       <div class="vote-button-window ng-hide" ng-show="canVote()">
         <button class="button button-full button-small button-assertive"
-          ng-click="showPlayerList()">
+          ng-click="showPlayerList($event)">
           Голосовать
         </button>
       </div>
@@ -60,7 +60,7 @@
 
   <ion-footer-bar class="bar-stable item-input-inset">
     <button class="button button-clear button-stable icon ion-person-stalker"
-      ng-click="showPlayerList()">
+      ng-click="showPlayerList($event)">
     </button>
     <label class="item-input-wrapper">
       <div class="icon ion-chatboxes placeholder-icon"></div>
