@@ -1,5 +1,12 @@
 <ion-modal-view>
-  <ion-content class="center-content">
-    <h1>Hello!</h1>
+  <ion-content class="players-view">
+    <div class="button button-full vote-button"
+      ng-click="vote({{$index}})" ng-disabled="!canVote()"
+      ng-repeat="player in roomData.playerList track by $index">
+      <span class="player-index {{'p' + ($index + 1)}}">
+        {{$index + 1}}
+      </span>
+      {{player}}
+    </div>
   </ion-content>
 </ion-modal-view>

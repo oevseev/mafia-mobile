@@ -14,6 +14,15 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     font-size: 36px;
 }
 
+// Значок с индексом игрока
+.player-index {
+    border-radius: 3px;
+    text-align: center; 
+    background-color: #000;
+    color: #fff;
+}
+
 // Стили видов
 @import "main.view.scss";
+@import "players.view.scss";
 @import "room.view.scss";

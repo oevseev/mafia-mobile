@@ -30,7 +30,7 @@
             <li ng-repeat="message in messages">
               <div class="chat-message" id="{{$index}}" ng-if="!message.isLog">
                 <div class="message-left">
-                  <div class="player-index p{{message.playerIndex}}">
+                  <div class="player-index {{'p' + message.playerIndex}}">
                     {{message.playerIndex}}
                   </div>
                 </div>
@@ -59,6 +59,9 @@
   </ion-content>
 
   <ion-footer-bar class="bar-stable item-input-inset">
+    <button class="button button-clear button-stable icon ion-person-stalker"
+      ng-click="showPlayerList()">
+    </button>
     <label class="item-input-wrapper">
       <div class="icon ion-chatboxes placeholder-icon"></div>
       <input id="chat-input" type="text" placeholder="Сообщение в чат"

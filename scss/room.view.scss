@@ -79,9 +79,7 @@
 
             // Индекс пользователя заполняет всю левую колонку
             .player-index {
-                border-radius: 3px;
                 // overflow: auto;
-                text-align: center;
                 width: 30px;
                 height: 100%;
             }
@@ -97,10 +95,4 @@
             font-style: italic;
         }
     }
-}
-
-// Цвета индекса по умолчанию
-.player-index {
-    background-color: #000;
-    color: #fff;
 }

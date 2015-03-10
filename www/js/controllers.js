@@ -179,6 +179,12 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
     });
   };
 
+  // Голосование
+  $scope.vote = function (vote) {
+    GameManager.vote(vote);
+    $scope.playerListView.hide();
+    $scope.logMessage("Вы проголосовали против игрока #" + vote + ".");
+  };
 
   // Начало игры
   $scope.startGame = function () {
@@ -196,6 +202,27 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
   $scope.showPlayerList = function () {
     $scope.playerListView.show();
   };
+
+  /*
+  $scope.getPlayerGrid = function (rowSize) {
+    var playerList = $scope.roomData.playerList.slice();
+
+    // Заполняем массив пустыми элементами для выравнивания
+    var phCount = playerList.length % rowSize ? rowSize - (playerList.length %
+      rowSize) : 0;
+    var placeholder = Array.apply(null, new Array(phCount)).map(function () {
+      return '';
+    });
+    playerList = playerList.concat(placeholder);
+
+    // Разбиваем массив на группы
+    var playerGrid = [];
+    for (var i = 0; i < playerList.length; i += rowSize) {
+      playerGrid.push(playerList.slice(i, i + rowSize));
+    }
+    return playerGrid;
+  };
+  */
 
   // Если имеем уже активное подключение
   if (GameManager.socket.connected) {
@@ -305,5 +332,8 @@ c.controller('RoomController', function ($scope, $state, $stateParams,
   });
 
   // Голосование игрока
-  GameManager.setEventHandler('playerVote', function (data) {});
+  GameManager.setEventHandler('playerVote', function (data) {
+    $scope.logMessage("Игрок #" + data.playerIndex + "голосует против игрока" +
+      + data.vote + "!");
+  });
 });
