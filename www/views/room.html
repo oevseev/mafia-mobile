@@ -6,9 +6,8 @@
   </ion-nav-bar>
 
   <ion-nav-buttons side="right">
-    <button class="button button-clear icon ion-play ng-hide"
-      ng-click="startGame()" ng-show="canStartGame">
-    </button>
+    <button class="button button-clear button-positive ng-hide"
+      ng-click="startGame()" ng-show="canStartGame">Начать</button>
   </ion-nav-buttons>
 
   <ion-content class="room-view" scroll="false">
@@ -60,7 +59,7 @@
 
   <ion-footer-bar class="bar-stable item-input-inset">
     <button class="button button-clear button-stable icon ion-navicon"
-      ng-click="showPlayerList($event)">
+      ng-click="showPlayerList()">
     </button>
     <label class="item-input-wrapper">
       <div class="icon ion-chatboxes placeholder-icon"></div>

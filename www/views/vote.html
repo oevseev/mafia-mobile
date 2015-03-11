@@ -1,2 +1,17 @@
 <ion-modal-view>
+
+  <ion-header-bar>
+    <button class="button button-clear button-assertive"
+      ng-click="closeVoteView()">Отмена</button>
+    <h1 class="title">Голосовать</h1>
+  </ion-header-bar>
+
+  <ion-content class="vote-view">
+    <button class="button button-full button-vote vote-button"
+      ng-click="vote($index)"
+      ng-repeat="player in roomData.playerList track by $index">
+      {{player}}
+    </button>
+  </ion-content>
+
 </ion-modal-view>

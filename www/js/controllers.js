@@ -26,7 +26,7 @@ c.controller('MainController', function ($scope, $state, $ionicLoading,
 
     if (typeof eventName != 'undefined') {
       $ionicLoading.show({
-        template: '<div class="icon icon-big ion-loading-c"></div>'
+        templateUrl: 'views/loading.html'
       });
 
       GameManager.setAssertionTimeout(function() {
@@ -62,7 +62,7 @@ c.controller('MainController', function ($scope, $state, $ionicLoading,
   // Повтор подключения к серверу
   $scope.reconnect = function () {
     $ionicLoading.show({
-      template: '<div class="icon icon-big ion-loading-c"></div>'
+      templateUrl: 'views/loading.html'
     });
     GameManager.initialize(function (success) {
       $ionicLoading.hide();
@@ -111,7 +111,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     scope: $scope
   }).then(function (modal) {
     $scope.voteView = modal;
-  })
+  });
 
   // ID комнаты и список сообщений
   $scope.id = $stateParams.id;
@@ -222,7 +222,11 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   // Показ вида голосования
   $scope.showVoteView = function () {
     $scope.voteView.show();
-  }
+  };
+
+  $scope.closeVoteView = function () {
+    $scope.voteView.hide();
+  };
 
   /*
   $scope.getPlayerGrid = function (rowSize) {

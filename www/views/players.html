@@ -1,10 +1,8 @@
 <ion-popover-view class="players-popover">
   <ion-pane class="players-view">
-    <div class="player-entry" ng-click="vote($index)" ng-disabled="!canVote()"
+    <div class="player-entry" ng-disabled="!canVote()"
       ng-repeat="player in roomData.playerList track by $index">
-      <span class="player-index {{'p' + ($index + 1)}}">
-        {{$index + 1}}
-      </span>
+      <span class="player-index {{'p' + ($index + 1)}}">{{$index + 1}}</span>
       <span class="role-icon {{getPlayerRoleClass($index)}}"></span>
       {{player}}
     </div>
