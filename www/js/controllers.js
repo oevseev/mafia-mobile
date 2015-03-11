@@ -151,16 +151,33 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
   // Получение имени роли игрока
   $scope.getPlayerRoleClass = function (index) {
+    var roleClass = '';
     var epEntry = $scope.roomData.exposedPlayers[index];
 
-    if (epEntry) {
-      var roleClass = epEntry.role;
-      if (!epEntry.eliminated) {
-        roleClass += ' alive';
-      }
-      return roleClass;
+    if (index == $scope.roomData.playerIndex) {
+      roleClass = $scope.roomData.playerRole + ' me';
     } else {
-      return 'unknown';
+      if (epEntry) {
+        roleClass = epEntry.role;
+      } else {
+        return 'unknown';
+      }
+    }
+
+    if (epEntry && !epEntry.eliminated) {
+      roleClass += ' alive';
+    }
+
+    return roleClass;
+  };
+
+  // Можно ли проголосовать против игрока
+  $scope.canBeVoted = function (index) {
+    if (index == $scope.roomData.playerIndex) {
+      return false;
+    }
+    if (index in $scope.roomData.exposedPlayers) {
+      return !$scope.roomData.exposedPlayers[index].eliminated;
     }
   };
 
@@ -254,7 +271,6 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     $scope.voteView.remove();
   });
 
-  // Если имеем уже активное подключение
   if (GameManager.socket.connected) {
     // Отправляем запрос на подключение к комнате
     GameManager.connectToRoom($stateParams.id, function (data) {
@@ -272,7 +288,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
       }
     });
   } else {
-    // Если не удалось получить данные
+    // Если подключение к комнате не было произведено заранее
     $state.go('main');
   }
 
@@ -334,6 +350,14 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     } else {
       $scope.logMessage("Победили мирные жители!");
     }
+
+    // Сброс состояния игры до первоначального
+    $scope.canStartGame = ($scope.roomData.playerIndex === 0);
+    with ($scope.roomData) {
+      role = null;
+      state = null;
+      exposedPlayers = {};
+    }
   });
 
   // Подключение игрока
@@ -343,7 +367,9 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   });
 
   // Уход игрока
-  GameManager.setEventHandler('playerLeft', function (data) {});
+  GameManager.setEventHandler('playerLeft', function (data) {
+    $scope.logMessage("Игрок #" + (data.playerIndex + 1) + " выходит из игры.");
+  });
 
   // Сообщение чата
   GameManager.setEventHandler('chatMessage', function (data) {

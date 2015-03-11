@@ -116,6 +116,18 @@ client.service('GameManager', function ($rootScope, $timeout, Config) {
     this.socket.connect();
   };
 
+  /*
+  // Установка/возобновление подключения
+  this.connectIfNecessary = function (succCallback, failCallback) {
+    if (this.socket.connected) {
+      this.cancelAssertionTimeout();
+      succCallback(this.socket);
+    } else {
+      this.assertConnection(succCallback, failCallback);
+    }
+  };
+  */
+
   // Установка таймаута (в секундах)
   this.setAssertionTimeout = function (callback, timeout) {
     if (this.timeout) {
@@ -135,8 +147,10 @@ client.service('GameManager', function ($rootScope, $timeout, Config) {
 
   // Отмена таймаута
   this.cancelAssertionTimeout = function () {
-    $timeout.cancel(this.timeout);
-    this.timeout = null;
+    if (this.timeout) {
+      $timeout.cancel(this.timeout);
+      this.timeout = null;
+    }
   };
 
   // Установка обработчика события

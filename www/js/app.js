@@ -23,7 +23,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 app.config(function ($ionicConfigProvider) {
   with ($ionicConfigProvider) {
     backButton.text("Выйти");
-    navBar.alignTitle("center");
   }
 });
 

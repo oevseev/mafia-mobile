@@ -8,9 +8,9 @@
 
   <ion-content class="vote-view">
     <button class="button button-full button-vote vote-button"
-      ng-click="vote($index)"
+      ng-click="vote($index)" ng-disabled="!canBeVoted($index)"
       ng-repeat="player in roomData.playerList track by $index">
-      {{player}}
+      {{($index + 1) + ' — ' + player}}
     </button>
   </ion-content>
 
