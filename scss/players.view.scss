@@ -28,4 +28,11 @@
             display: none;
         }
     }
+
+    .player-name {
+        &.dead {
+            color: silver;
+            text-decoration: line-through;
+        }
+    }
 }

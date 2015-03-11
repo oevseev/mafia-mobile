@@ -128,10 +128,16 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
   // Доступна ли кнопка начала игры
   $scope.canStartGame = false;
+  // Голосовал ли игрок в этой фазе
+  $scope.alreadyVoted = false;
 
   // Доступно ли голосование
   $scope.canVote = function () {
-    if ($scope.roomData.state === null) {
+    if ($scope.roomData.state === null || $scope.alreadyVoted) {
+      return false;
+    }
+    if ($scope.roomData.playerIndex in $scope.roomData.exposedPlayers &&
+      $scope.roomData.exposedPlayers[$scope.roomData.playerIndex].eliminated) {
       return false;
     }
     return $scope.roomData.state.isVoting && ($scope.roomData.
@@ -151,24 +157,19 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
   // Получение имени роли игрока
   $scope.getPlayerRoleClass = function (index) {
-    var roleClass = '';
-    var epEntry = $scope.roomData.exposedPlayers[index];
-
     if (index == $scope.roomData.playerIndex) {
-      roleClass = $scope.roomData.playerRole + ' me';
+      var role = $scope.roomData.playerRole;
+      return (role ? role : 'unknown') + ' me';
     } else {
-      if (epEntry) {
-        roleClass = epEntry.role;
-      } else {
-        return 'unknown';
-      }
+      var epEntry = $scope.roomData.exposedPlayers[index];
+      return epEntry ? epEntry.role : 'unknown';
     }
+  };
 
-    if (epEntry && !epEntry.eliminated) {
-      roleClass += ' alive';
-    }
-
-    return roleClass;
+  // Жив ли игрок
+  $scope.isAlive = function (index) {
+    var epEntry = $scope.roomData.exposedPlayers[index];
+    return epEntry ? (epEntry && !epEntry.eliminated) : true;
   };
 
   // Можно ли проголосовать против игрока
@@ -176,10 +177,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     if (index == $scope.roomData.playerIndex) {
       return false;
     }
-    if (index in $scope.roomData.exposedPlayers) {
-      return !$scope.roomData.exposedPlayers[index].eliminated;
-    }
-    return true;
+    return $scope.isAlive(index);
   };
 
   // Добавление информационного сообщения в чат
@@ -217,6 +215,8 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   // Голосование
   $scope.vote = function (vote) {
     $scope.voteView.hide();
+    $scope.alreadyVoted = true;
+
     GameManager.vote(vote);
     $scope.logMessage("Вы проголосовали против игрока #" + (vote + 1) + ".");
   };
@@ -233,19 +233,15 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     $ionicHistory.goBack();
   };
 
-  // Показ списка игроков
+  // Показать список игроков
   $scope.showPlayerList = function ($event) {
     $scope.playerListView.show($event);
   };
 
-  // Показ вида голосования
+  // Показать меню голосования
   $scope.showVoteView = function () {
     $scope.voteView.show();
-  };
-
-  $scope.closeVoteView = function () {
-    $scope.voteView.hide();
-  };
+  }
 
   /*
   $scope.getPlayerGrid = function (rowSize) {
@@ -318,6 +314,9 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
         outcome = "посажен в тюрьму";
       }
 
+      $scope.voteView.hide();
+      $scope.alreadyVoted = false;
+
       if (data.outvotedPlayer) {
         $scope.logMessage("Игрок #" + (data.outvotedPlayer.playerIndex + 1) +
           " (" + Roles[data.outvotedPlayer.role] + ") был " + outcome + ".");
@@ -354,12 +353,14 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     }
 
     // Сброс состояния игры до первоначального
-    $scope.canStartGame = ($scope.roomData.playerIndex === 0);
-    with ($scope.roomData) {
-      role = null;
-      state = null;
-      exposedPlayers = {};
-    }
+    $scope.apply(function () {
+      $scope.canStartGame = ($scope.roomData.playerIndex === 0);
+      with ($scope.roomData) {
+        role = null;
+        state = null;
+        exposedPlayers = {};
+      }
+    });
   });
 
   // Подключение игрока
