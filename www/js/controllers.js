@@ -179,6 +179,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     if (index in $scope.roomData.exposedPlayers) {
       return !$scope.roomData.exposedPlayers[index].eliminated;
     }
+    return true;
   };
 
   // Добавление информационного сообщения в чат
@@ -215,6 +216,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
   // Голосование
   $scope.vote = function (vote) {
+    $scope.voteView.hide();
     GameManager.vote(vote);
     $scope.logMessage("Вы проголосовали против игрока #" + (vote + 1) + ".");
   };
@@ -317,8 +319,8 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
       }
 
       if (data.outvotedPlayer) {
-        $scope.logMessage("Игрок #" + (data.outvotedPlayer.index + 1) + " (" +
-          Roles[data.outvotedPlayer.role] + ") был " + outcome + ".");
+        $scope.logMessage("Игрок #" + (data.outvotedPlayer.playerIndex + 1) +
+          " (" + Roles[data.outvotedPlayer.role] + ") был " + outcome + ".");
       }
       $scope.logMessage(message);
     }
