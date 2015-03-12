@@ -1,16 +1,16 @@
 .players-popover {
-    height: auto !important;
-    width: auto !important;
+    height: auto;
+    width: auto;
 
-    padding: 10px !important;
+    padding: 10px;
 }
 
 .platform-android .players-popover {
-  margin-top: 10px !important;
+  margin-top: 10px;
 }
 
 .players-view {
-    position: relative !important;
+    position: relative;
 
     .vote-button {
         margin: 0px;
@@ -27,9 +27,22 @@
         &.unknown {
             display: none;
         }
+
+        // Временные стили
+        color: silver;
+
+        &.mafia:after {
+            content: "(маф.)";
+        }
+        &.civilian:after {
+            content: "(мирн.)";
+        }
     }
 
     .player-name {
+        &.me {
+            font-weight: bold;
+        }
         &.dead {
             color: silver;
             text-decoration: line-through;

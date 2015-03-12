@@ -158,8 +158,8 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   // Получение имени роли игрока
   $scope.getPlayerRoleClass = function (index) {
     if (index == $scope.roomData.playerIndex) {
-      var role = $scope.roomData.playerRole;
-      return (role ? role : 'unknown') + ' me';
+      var role = $scope.roomData.role;
+      return role ? role : 'unknown';
     } else {
       var epEntry = $scope.roomData.exposedPlayers[index];
       return epEntry ? epEntry.role : 'unknown';
@@ -170,6 +170,17 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   $scope.isAlive = function (index) {
     var epEntry = $scope.roomData.exposedPlayers[index];
     return epEntry ? (epEntry && !epEntry.eliminated) : true;
+  };
+
+  $scope.getPlayerStatusClass = function (index) {
+    var epEntry = $scope.roomData.exposedPlayers[index];
+    var statusClass = $scope.isAlive(index) ? 'alive' : 'dead';
+
+    if (index == $scope.roomData.playerIndex) {
+      statusClass += ' me';
+    }
+
+    return statusClass;
   };
 
   // Можно ли проголосовать против игрока
@@ -353,14 +364,12 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     }
 
     // Сброс состояния игры до первоначального
-    $scope.apply(function () {
-      $scope.canStartGame = ($scope.roomData.playerIndex === 0);
-      with ($scope.roomData) {
-        role = null;
-        state = null;
-        exposedPlayers = {};
-      }
-    });
+    $scope.canStartGame = ($scope.roomData.playerIndex === 0);
+    with ($scope.roomData) {
+      role = null;
+      state = null;
+      exposedPlayers = {};
+    }
   });
 
   // Подключение игрока
@@ -388,6 +397,6 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   // Голосование игрока
   GameManager.setEventHandler('playerVote', function (data) {
     $scope.logMessage("Игрок #" + (data.playerIndex + 1) +
-      "голосует против игрока" + (data.vote + 1) + "!");
+      " голосует против игрока #" + (data.vote + 1) + "!");
   });
 });

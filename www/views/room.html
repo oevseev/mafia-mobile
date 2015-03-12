@@ -20,8 +20,9 @@
     <div class="game-screen" ng-hide="adTime">
 
       <div class="info-window">
-        {{roomData}}<br/>
-        canVote(): {{canVote()}}; canChat(): {{canChat()}}
+        <div class="info-left"></div>
+        <div class="info-center"></div>
+        <div class="info-right"></div>
       </div>
 
       <div class="chat-window">
@@ -30,9 +31,8 @@
             <li ng-repeat="message in messages">
               <div class="chat-message" id="{{$index}}" ng-if="!message.isLog">
                 <div class="message-left">
-                  <div class="player-index {{'p' + message.playerIndex}}">
-                    {{message.playerIndex}}
-                  </div>
+                  <div class="player-index {{'p' + message.playerIndex}}"
+                  >{{message.playerIndex}}</div>
                 </div>
                 <div class="message-right">
                   <span class="player-name">{{message.playerName}}:</span>
@@ -49,9 +49,7 @@
 
       <div class="vote-button-window ng-hide" ng-show="canVote()">
         <button class="button button-full button-small button-assertive"
-          ng-click="showVoteView()">
-          Голосовать
-        </button>
+          ng-click="showVoteView()">Голосовать</button>
       </div>
 
     </div>

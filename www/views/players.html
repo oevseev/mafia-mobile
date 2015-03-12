@@ -4,7 +4,7 @@
       ng-repeat="player in roomData.playerList track by $index">
       <span class="player-index {{'p' + ($index + 1)}}">{{$index + 1}}</span>
       <span class="role-icon {{getPlayerRoleClass($index)}}"></span>
-      <span class="player-name {{isAlive($index) ? 'alive' : 'dead'}}">{{player}}</span>
+      <span class="player-name {{getPlayerStatusClass($index)}}">{{player}}</span>
     </div>
   </ion-pane>
 </ion-popover-view>

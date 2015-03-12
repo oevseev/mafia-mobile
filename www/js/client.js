@@ -156,7 +156,9 @@ client.service('GameManager', function ($rootScope, $timeout, Config) {
   // Установка обработчика события
   this.setEventHandler = function (event, callback) {
     this.socket.on(event, function (data) {
-      $rootScope.$apply(callback(data));
+      $rootScope.$apply(function () {
+        callback(data)
+      });
     });
     if (this.events.indexOf(event) == -1) {
       this.events.push(event);
