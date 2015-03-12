@@ -126,10 +126,12 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     exposedPlayers: {}  // Список игроков, чья роль известна
   };
 
-  // Доступна ли кнопка начала игры
-  $scope.canStartGame = false;
   // Голосовал ли игрок в этой фазе
   $scope.alreadyVoted = false;
+  // Доступна ли кнопка начала игры
+  $scope.canStartGame = false;
+  // Началась ли игра
+  $scope.gameInProgress = false;
 
   // Доступно ли голосование
   $scope.canVote = function () {
@@ -155,6 +157,20 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     return $scope.roomData.role == 'mafia' || $scope.roomData.state.isDay;
   };
 
+  // Жив ли игрок
+  $scope.isAlive = function (index) {
+    var epEntry = $scope.roomData.exposedPlayers[index];
+    return epEntry ? (epEntry && !epEntry.eliminated) : true;
+  };
+
+  // Можно ли проголосовать против игрока
+  $scope.canBeVoted = function (index) {
+    if (index == $scope.roomData.playerIndex) {
+      return false;
+    }
+    return $scope.isAlive(index);
+  };
+
   // Получение имени роли игрока
   $scope.getPlayerRoleClass = function (index) {
     if (index == $scope.roomData.playerIndex) {
@@ -166,12 +182,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     }
   };
 
-  // Жив ли игрок
-  $scope.isAlive = function (index) {
-    var epEntry = $scope.roomData.exposedPlayers[index];
-    return epEntry ? (epEntry && !epEntry.eliminated) : true;
-  };
-
+  // Получение статуса игрока
   $scope.getPlayerStatusClass = function (index) {
     var epEntry = $scope.roomData.exposedPlayers[index];
     var statusClass = $scope.isAlive(index) ? 'alive' : 'dead';
@@ -183,12 +194,27 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     return statusClass;
   };
 
-  // Можно ли проголосовать против игрока
-  $scope.canBeVoted = function (index) {
-    if (index == $scope.roomData.playerIndex) {
-      return false;
+  // Получение локализованного имени роли
+  $scope.getRoleName = function () {
+    return Roles[$scope.roomData.role] || '???';
+  };
+
+  // Получение номера текущего хода
+  $scope.getMove = function () {
+    if ($scope.roomData.state) {
+      return $scope.roomData.state.move;
+    } else {
+      return '-';
     }
-    return $scope.isAlive(index);
+  };
+
+  // Получение имени текущей фазы
+  $scope.getPhaseName = function () {
+    if ($scope.roomData.state) {
+      return $scope.roomData.state.isDay ? "день" : "ночь";
+    } else {
+      return "знакомство мафии";
+    }
   };
 
   // Добавление информационного сообщения в чат
@@ -252,7 +278,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   // Показать меню голосования
   $scope.showVoteView = function () {
     $scope.voteView.show();
-  }
+  };
 
   /*
   $scope.getPlayerGrid = function (rowSize) {
@@ -290,7 +316,12 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
             $scope.roomData[field] = data[field];
           }
         }
+
+        // Устанавливаем состояние игры
         $scope.canStartGame = data.canStartGame;
+        if ('playerRole' in data) {
+          $scope.gameInProgress = true;
+        }
       });
       if (data.isFirstConnection) {
         $scope.logMessage("Добро пожаловать в игру!");
@@ -338,8 +369,9 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
   // Начало игры
   GameManager.setEventHandler('gameStarted', function (data) {
-    // Отключаем кнопку начала игры
+    // Отключаем кнопку начала игры и помечаем игру как начатую
     $scope.canStartGame = false;
+    $scope.gameInProgress = true;
 
     // Обновляем информацию об игре
     $scope.roomData.role = data.role;
@@ -365,6 +397,8 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
     // Сброс состояния игры до первоначального
     $scope.canStartGame = ($scope.roomData.playerIndex === 0);
+    $scope.gameInProgress = false;
+
     with ($scope.roomData) {
       role = null;
       state = null;

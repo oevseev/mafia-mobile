@@ -1,8 +1,7 @@
 .room-view {
-    .game-screen, .game-placeholder {
-        position: absolute;
-        width: 100%;
-        height: 100%;
+    > div {
+        // Все слои вида распологаются друг над другом.
+        @extend .stack;
     }
 
     .game-screen {
@@ -50,7 +49,9 @@
     .info-window {
         display: flex;
 
+        // Колонки статусной строки
         .info-left {
+            position: relative;
             width: 75px;
             border-right: 1px solid silver;
         }
@@ -58,8 +59,60 @@
             flex: 1;
         }
         .info-right {
+            position: relative;
             width: 75px;
             border-left: 1px solid silver;
+        }
+
+        // Табличка вида строка-число-строка
+        .info-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-flow: column wrap;
+
+            > div {
+                // По умолчанию все внутренние слои выравниваются по центру
+                text-align: center;
+            }
+        }
+
+        // Элементы статусной строки
+        .info-caption {
+            color: silver;
+            font-size: 10pt;
+        }
+        .info-digit {
+            flex: 1;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 24pt;
+        }
+        .info-footer {
+            height: 20px;
+            line-height: 90%;
+            color: gray;
+            font-size: 8pt;
+        }
+
+        // Метка с цветом игрока
+        .info-circle {
+            position: absolute;
+            top: calc(50% - 5px);
+            right: 5px;
+
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+        }
+
+        // Заглушка с сообщением о неначатой игре
+        .not-started {
+            color: gray;
+            font-size: 8pt;
+            text-align: center;
         }
     }
 

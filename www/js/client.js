@@ -157,7 +157,7 @@ client.service('GameManager', function ($rootScope, $timeout, Config) {
   this.setEventHandler = function (event, callback) {
     this.socket.on(event, function (data) {
       $rootScope.$apply(function () {
-        callback(data)
+        callback(data);
       });
     });
     if (this.events.indexOf(event) == -1) {

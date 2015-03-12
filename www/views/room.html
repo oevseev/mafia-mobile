@@ -13,16 +13,31 @@
 
   <ion-content class="room-view" scroll="false">
 
-    <div class="game-placeholder center-content ng-hide" ng-show="adTime">
+    <div class="ad-screen center-content ng-hide" ng-show="adTime">
       <p>Посмотри-ка рекламки!</p>
     </div>
 
     <div class="game-screen" ng-hide="adTime">
 
       <div class="info-window">
-        <div class="info-left"></div>
+        <div class="info-left">
+          <div class="info-content">
+            <div class="info-caption">Вы</div>
+            <div class="info-digit">{{roomData.playerIndex + 1}}</div>
+            <div class="info-footer">{{getRoleName()}}</div>
+          </div>
+          <div class="info-circle {{'p' + (roomData.playerIndex + 1)}}"></div>
+        </div>
         <div class="info-center"></div>
-        <div class="info-right"></div>
+        <div class="info-right">
+          <div class="not-started center-content stack"
+            ng-hide="gameInProgress">Игра еще не&nbsp;началась</div>
+          <div class="info-content stack ng-hide" ng-show="gameInProgress">
+            <div class="info-caption">Ход</div>
+            <div class="info-digit">{{getMove()}}</div>
+            <div class="info-footer">{{getPhaseName()}}</div>
+          </div>
+        </div>
       </div>
 
       <div class="chat-window">
