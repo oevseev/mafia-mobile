@@ -121,6 +121,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   $scope.roomData = {
     playerIndex: null,  // Индекс игрока (начиная с 0!)
     playerList: [],     // Список имен игроков в комнате
+    options: {},        // Настройки комнаты
     role: null,         // Роль игрока
     state: null,        // Состояние игры
     exposedPlayers: {}  // Список игроков, чья роль известна
@@ -148,7 +149,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
   // Доступен ли чат
   $scope.canChat = function () {
-    if ($scope.roomData.role === null) {
+    if (!$scope.gameInProgress) {
       return true;
     }
     if ($scope.roomData.state === null) {
@@ -201,7 +202,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
   // Получение номера текущего хода
   $scope.getMove = function () {
-    if ($scope.roomData.state) {
+    if ($scope.roomData.state && $scope.roomData.state.move != 0) {
       return $scope.roomData.state.move;
     } else {
       return '-';
@@ -210,7 +211,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
   // Получение имени текущей фазы
   $scope.getPhaseName = function () {
-    if ($scope.roomData.state) {
+    if ($scope.roomData.state && $scope.roomData.state.move != 0) {
       return $scope.roomData.state.isDay ? "день" : "ночь";
     } else {
       return "знакомство мафии";
@@ -280,6 +281,11 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     $scope.voteView.show();
   };
 
+  // Скрыть меню голосования
+  $scope.closeVoteView = function () {
+    $scope.voteView.hide();
+  };
+
   /*
   $scope.getPlayerGrid = function (rowSize) {
     var playerList = $scope.roomData.playerList.slice();
@@ -302,7 +308,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   */
 
   $scope.$on('$destroy', function () {
-    $scope.playerListView.remove()
+    $scope.playerListView.remove();
     $scope.voteView.remove();
   });
 
@@ -319,7 +325,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
 
         // Устанавливаем состояние игры
         $scope.canStartGame = data.canStartGame;
-        if ('playerRole' in data) {
+        if ('role' in data) {
           $scope.gameInProgress = true;
         }
       });
@@ -335,7 +341,7 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
   // Обновление данных комнаты
   GameManager.setEventHandler('update', function (data) {
     $scope.roomData.state = data.state;
-    if (data.outvotedPlayer) {
+    if (data.outvotedPlayer && !data.gameEnded) {
       $scope.roomData.exposedPlayers[data.outvotedPlayer.playerIndex] = {
         role: data.outvotedPlayer.role,
         eliminated: true
@@ -396,24 +402,34 @@ c.controller('RoomController', function ($scope, $state, $stateParams, $timeout,
     }
 
     // Сброс состояния игры до первоначального
-    $scope.canStartGame = ($scope.roomData.playerIndex === 0);
-    $scope.gameInProgress = false;
+    $timeout(function () {
+      $scope.canStartGame = ($scope.roomData.playerIndex === 0);
+      $scope.gameInProgress = false;
 
-    with ($scope.roomData) {
-      role = null;
-      state = null;
-      exposedPlayers = {};
-    }
+      with ($scope.roomData) {
+        role = null;
+        state = null;
+        exposedPlayers = {};
+      }
+    });
   });
 
   // Подключение игрока
   GameManager.setEventHandler('playerJoined', function (data) {
-    $scope.roomData.playerList.push(data.playerName);
+    if (!data.wasInRoomBefore) {
+      $scope.roomData.playerList.push(data.playerName);
+    }
     $scope.logMessage("Игрок " + data.playerName + " присоединяется к игре.");
   });
 
   // Уход игрока
   GameManager.setEventHandler('playerLeft', function (data) {
+    if ($scope.gameInProgress) {
+      $scope.roomData.exposedPlayers[data.playerIndex] = {
+        role: data.role,
+        eliminated: true
+      };
+    }
     $scope.logMessage("Игрок #" + (data.playerIndex + 1) + " выходит из игры.");
   });
 

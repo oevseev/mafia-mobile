@@ -118,6 +118,7 @@
 
     .chat {
         display: table;
+        table-layout: fixed;
         border-collapse: separate;
         border-spacing: 3px 2px;
         width: 100%;
@@ -157,6 +158,10 @@
             // Имя пользователя выделяется полужирным
             .player-name {
                 font-weight: bold;
+            }
+            // Длинные слова в сообщении переносятся
+            .message {
+                word-break: break-word;
             }
         }
         
